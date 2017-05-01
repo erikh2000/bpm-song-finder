@@ -1,0 +1,27 @@
+{
+  "name": "bpm-song-finder",
+  "contributors": [{
+    "name": "Erik Hermansen",
+    "ehermansen@seespacelabs.com"
+  }],
+  "version": "1.0.0",
+  "private": true,
+  "dependencies": {
+    "prop-types": "^15.5.8",
+    "react": "^15.5.4",
+    "react-bootstrap": "^0.30.9",
+    "react-dom": "^15.5.4",
+    "seedrandom": "^2.4.3",
+    "spotify-web-api-js": "^0.21.2"
+  },
+  "devDependencies": {
+    "react-scripts": "0.9.5"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject"
+  },
+  "license": "MIT"
+}

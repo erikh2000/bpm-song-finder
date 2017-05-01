@@ -1,0 +1,43 @@
+body {
+  background-color: #cccccc;
+}
+
+.title-graphic {
+  background-image: url(title.png);
+  background-repeat: no-repeat;
+  float: right;
+  position: relative;
+  width: 615px;
+  height: 56px;
+}
+
+@media screen and (max-width: 840px) {
+  .title-graphic {
+    display: none;
+  }
+}
+
+.search-results--header-row {
+  background-color: #a0b050;
+  text-align: left;
+}
+
+.clear-float {
+  clear: both;
+}
+
+.footer {
+  margin: 5px;
+  background-color: #aaaaaa;
+}
+
+.letsFindText {
+  color: #eeeeee;
+  font-size: 24px;
+  line-height: 200px;
+}
+
+.search-results-panel {
+  text-align: center;
+  min-height: 200px;
+}
