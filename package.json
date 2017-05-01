@@ -2,7 +2,7 @@
   "name": "bpm-song-finder",
   "contributors": [{
     "name": "Erik Hermansen",
-    "ehermansen@seespacelabs.com"
+    "email":"ehermansen@seespacelabs.com"
   }],
   "version": "1.0.0",
   "private": true,
