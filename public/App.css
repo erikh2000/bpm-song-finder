@@ -11,6 +11,12 @@ body {
   height: 56px;
 }
 
+@media screen and (max-width: 767px) {
+  .header {
+    padding-top: 20px;
+  }
+}
+
 @media screen and (max-width: 840px) {
   .title-graphic {
     display: none;
@@ -29,6 +35,34 @@ body {
 .footer {
   margin: 5px;
   background-color: #aaaaaa;
+}
+
+@media screen and (max-width: 480px) {
+  .footer-long-text {
+    display: none;
+  }
+  .footer-short-text {
+    display: inline;
+  }
+}
+@media screen and (min-width: 481px) {
+  .footer-long-text {
+    display: inline;
+  }
+  .footer-short-text {
+    display: none;
+  }
+}
+
+.footer-logo {
+  float: right;
+  background-image: url('seespace-logo.png');
+  width: 80px;
+  height: 30px;
+  background-size: 80px 30px;
+  position: relative;
+  top: -5px;
+  left: 5px;
 }
 
 .letsFindText {

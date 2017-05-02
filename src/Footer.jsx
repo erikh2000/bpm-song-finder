@@ -3,7 +3,9 @@ import { Well } from 'react-bootstrap';
 
 const Footer = () => (
   <Well bsSize='small' className='footer'>
-    Cheerfully written by <a href='https://github.com/erikh2000'>Erik Hermansen</a> of <a href='http://seespacelabs.com'>Seespace Labs</a>. Data from <a href='http://spotify.com'>Spotify</a>.
+    <span className='footer-long-text'>Cheerfully written by <a href='https://github.com/erikh2000'>Erik Hermansen</a>. Data from <a href='http://spotify.com'>Spotify</a>.</span>
+    <span className='footer-short-text'>By <a href='https://github.com/erikh2000'>Erik Hermansen</a>. Data from <a href='http://spotify.com'>Spotify</a>.</span>
+    <a href='http://seespacelabs.com'><span className='footer-logo' /></a>
   </Well>
 );
 
