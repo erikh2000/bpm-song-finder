@@ -16,35 +16,33 @@ function waterfall(list) {
     return Promise.reject("Array with reduce function is needed.");
   }
 
-  if (list.length == 1) {
-    if (typeof list[0] != "function")
+  if (list.length === 1) {
+    if (typeof list[0] !== "function")
       return Promise.reject("First element of the array should be a function, got " + typeof list[0]);
     return Promise.resolve(list[0]());
   }
 
-  return list.reduce(function(l, r){
+  return list.reduce(function(l, r) {
     // first round
     // execute function and return promise
-    var isFirst = (l == list[0]);
+    var isFirst = (l === list[0]);
     if (isFirst) {
-      if (typeof l != "function")
+      if (typeof l !== "function") {
         return Promise.reject("List elements should be function to call.");
+      }
 
       var lret = l();
-      if (!isPromise(lret))
+      if (!isPromise(lret)) {
         return Promise.reject("Function return value should be a promise.");
-      else
+      } else {
         return lret.then(r);
-    }
-
-    // other rounds
-    // l is a promise now
-    // priviousPromiseList.then(nextFunction)
-    else {
-      if (!isPromise(l))
+      }
+    } else { // other rounds - l is a promise now
+      if (!isPromise(l)) {
         Promise.reject("Function return value should be a promise.");
-      else
+      } else {
         return l.then(r);
+      }
     }
   });
 }
