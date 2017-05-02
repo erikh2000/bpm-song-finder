@@ -9,7 +9,7 @@ let initData = null;
 const SEARCH_LIMIT = 50;
 const AUDIO_FEATURES_LIMIT = 50;
 
-function _init(spotifyApi) {
+function _init() {
   let s;
   if (initData) {
     return Promise.resolve(initData);
@@ -18,7 +18,8 @@ function _init(spotifyApi) {
     return fetch('https://spotify-web-api-token.herokuapp.com/token').then((response) => {
       return response.json();
     }).then((responseObj) => {
-      s.setAccessToken(responseObj.token);
+      return _setNewAccessToken(s);
+    }).then(() => {
       initData = {
         spotifyWebApi: s
       };
@@ -27,12 +28,28 @@ function _init(spotifyApi) {
   }
 }
 
-function _getArtistId({s, artist}) {
+function _setNewAccessToken(s) {
+  return fetch('https://spotify-web-api-token.herokuapp.com/token').then((response) => {
+    return response.json();
+  }).then((responseObj) => {
+    s.setAccessToken(responseObj.token);
+  });
+}
+
+// Side effect - get a new access token, if old one expired.
+function _getArtistId({s, artist, isRecursing=false}) {
   return s.searchArtists(`artist:${artist}`, { limit: 1 }).then( (response) => {
     if (!response.artists.total) {
       return null;
     } else {
       return response.artists.items[0].id;
+    }
+  }).catch((err) => {
+    if (err && err.status === 401 && !isRecursing) {
+      //Probably means access token expired. Get new access token and try again.
+      return _setNewAccessToken().then( _getArtistId({s, artist, isRecursing:true}) );
+    } else {
+      throw err;
     }
   });
 }
@@ -94,13 +111,22 @@ function _getAudioFeaturesForTracks(s, trackIds) {
   return s.getAudioFeaturesForTracks(trackIds);
 }
 
+//Side effect: filter out tracks that aren't music.
+const PROBABLY_JUST_SPEECH = .66;
 function _findBpmForTracks({s, onUpdateLoaded, onNextTrackIds}) {
   const trackIds = onNextTrackIds();
   return _getAudioFeaturesForTracks(s, trackIds)
   .then( (response) => {
-    const bpms = response.audio_features.map( (audioFeatures) =>
-        Math.round(audioFeatures.tempo)
-    );
+    const bpms = response.audio_features.map( (audioFeatures) => {
+      if (!audioFeatures) {
+        //Occasionnaly, Spotify has no audio feature data for a track. Just filter out the track.
+        return 0;
+      } else if (audioFeatures.speechiness >= PROBABLY_JUST_SPEECH) {
+        return 0;
+      } else {
+        return Math.round(audioFeatures.tempo)
+      }
+    });
     onUpdateLoaded(bpms);
     return; // BPM information gets passed via above call to onUpdateLoaded().
   });
@@ -128,13 +154,27 @@ function _getProgressSummary(progress) {
 }
 
 function _filterAndSortTracksByBpm(tracks, targetBpm) {
+  //Filter anything not within 10bpm (including halved BPM).
   const filteredTracks = tracks.filter( (track) => { return calcBpmCloseness(targetBpm, track.bpm) < 10; });
-  const sortedTracks = filteredTracks.sort( (trackA, trackB) => Math.sign(trackB.bpm - trackA.bpm) );
+
+  //Sort tracks by BPM, title, and album.
+  const sortedTracks = filteredTracks.sort( (trackA, trackB) => {
+    if (trackB.bpm !== trackA.bpm) {
+      return Math.sign(trackB.bpm - trackA.bpm) ;
+    } else if (trackB.track !== trackA.track) {
+      return Math.sign(trackA.track - trackB.track);
+    } else {
+      return Math.sign(trackA.album - trackB.album);
+    }
+  });
+
+  //Remove any duplicates (same title and album).
   const deduped = sortedTracks.filter( (track, index) => {
     return (sortedTracks.find( (track2, index2) => {
       return (index !== index2 && track.track === track2.track && track.album === track2.album);
     }) === undefined);
   });
+
   return deduped;
 }
 
@@ -149,16 +189,12 @@ function _getFindBpmFuncs({s, trackCount, onNextTrackIds, onUpdateLoaded}) {
 }
 
 export function findTracksByArtistBpm({artist, targetBpm, onProgressUpdate}) {
-  let s;
-
   const progress = {
     artistId: null,
     trackCount: null,
     bpmsLoaded: null,
     tracks: []
   };
-
-  onProgressUpdate({description:'', percent:0});
 
   function _onNextBpmTrackIds() {
     let trackIds = [];
@@ -181,6 +217,8 @@ export function findTracksByArtistBpm({artist, targetBpm, onProgressUpdate}) {
     onProgressUpdate(_getProgressSummary(progress));
   }
 
+  onProgressUpdate({description:'Checking cache...', percent:0});
+
   // Grab a past look up from the local storage cache, if it's there.
   const cachedTracks = getCachedTracks(artist, targetBpm);
   if (cachedTracks) {
@@ -188,17 +226,23 @@ export function findTracksByArtistBpm({artist, targetBpm, onProgressUpdate}) {
     return Promise.resolve(cachedTracks);
   }
 
-  // Init the API, get an access token if needed.
+  onProgressUpdate({description:'Connecting to Spotify...', percent:0});
+
+  let s;
+
+  // Init the API, get an access token if needed, and look up the artist.
   return _init().then( ({spotifyWebApi}) => {
     onProgressUpdate(_getProgressSummary(progress));
     s = spotifyWebApi;
     return _getArtistId({s, artist});
   }).then((artistId) => {
+    // Get all albums by the artist.
     if (!artistId) { throw new Error(`I couldn't find an artist matching that name.`); }
     progress.artistId = artistId;
     onProgressUpdate(_getProgressSummary(progress));
     return _getArtistAlbums({s, artistId});
   }).then((albumIds) => {
+    // Get all tracks from those albums.
     if (!albumIds.length) { throw new Error(`I couldn't find any albums for that artist.`); }
     onProgressUpdate(_getProgressSummary(progress));
     return _getAlbumTracks({s, artistId:progress.artistId, albumIds});
