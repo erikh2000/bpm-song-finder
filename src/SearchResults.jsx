@@ -50,9 +50,9 @@ class SearchResults extends Component {
       const isPlaying = (index === this.state.playingIndex);
       return (
         <tr className={rowClass} key={index}>
+          <td>{result.bpm}</td>
           <td>{result.track}</td>
           <td>{result.album}</td>
-          <td>{result.bpm}</td>
           <td><PreviewPlayer onBindAudioPlayer={this._handleBindAudioPlayer} onPlay={this._handlePlay} onPause={this._handlePause} index={index} url={result.previewUrl} isPlaying={isPlaying}/></td>
         </tr>);
     });
@@ -60,7 +60,7 @@ class SearchResults extends Component {
     return (
       <Panel className={className}>
         <Table bordered condensed>
-          <thead><tr className='search-results--header-row'><th>Track</th><th>Album</th><th>BPM</th><th>Preview</th></tr></thead>
+          <thead><tr className='search-results--header-row'><th>BPM</th><th>Track</th><th>Album</th><th>Preview</th></tr></thead>
           <tbody>{rows}</tbody>
         </Table>
       </Panel>
