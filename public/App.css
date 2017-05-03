@@ -1,5 +1,20 @@
+html {
+  height: 100%
+}
+
 body {
   background-color: #cccccc;
+  height: 100%;
+}
+
+#root {
+  height: 100%;
+}
+
+.app {
+  display: flex;
+  flex-flow: column;
+  height: 100%;
 }
 
 .title-graphic {
@@ -23,9 +38,23 @@ body {
   }
 }
 
+.search-results-panel {
+  flex: 1;
+  overflow-y: scroll;
+  text-align: center;
+  min-height: 200px;
+  margin-bottom: 0;
+}
+
 .search-results--header-row {
   background-color: #a0b050;
   text-align: left;
+}
+
+.letsFindText {
+  color: #eeeeee;
+  font-size: 24px;
+  line-height: 200px;
 }
 
 .clear-float {
@@ -35,6 +64,9 @@ body {
 .footer {
   margin: 5px;
   background-color: #aaaaaa;
+  display: flex;
+  justify-content: space-between;
+  min-height: 50px;
 }
 
 @media screen and (max-width: 480px) {
@@ -60,18 +92,5 @@ body {
   width: 80px;
   height: 30px;
   background-size: 80px 30px;
-  position: relative;
-  top: -5px;
-  left: 5px;
-}
-
-.letsFindText {
-  color: #eeeeee;
-  font-size: 24px;
-  line-height: 200px;
-}
-
-.search-results-panel {
-  text-align: center;
-  min-height: 200px;
+  flex-basis: auto;
 }
