@@ -1,9 +1,11 @@
 {
   "name": "bpm-song-finder",
-  "contributors": [{
-    "name": "Erik Hermansen",
-    "email":"ehermansen@seespacelabs.com"
-  }],
+  "contributors": [
+    {
+      "name": "Erik Hermansen",
+      "email": "ehermansen@seespacelabs.com"
+    }
+  ],
   "version": "1.0.0",
   "private": true,
   "dependencies": {
@@ -15,16 +17,20 @@
     "spotify-web-api-js": "^0.21.2"
   },
   "devDependencies": {
+    "gh-pages": "^0.12.0",
     "react-scripts": "0.9.5"
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build"
   },
   "eslintConfig": {
     "extends": "react-app"
   },
+  "homepage": "https://erikh2000.github.io/bpm-song-finder/",
   "license": "MIT"
 }
