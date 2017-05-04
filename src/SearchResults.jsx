@@ -58,12 +58,12 @@ class SearchResults extends Component {
     });
 
     return (
-      <Panel className={className}>
+      <div className='search-results--scroll-container'>
         <Table bordered condensed>
           <thead><tr className='search-results--header-row'><th>BPM</th><th>Track</th><th>Album</th><th>Preview</th></tr></thead>
           <tbody>{rows}</tbody>
         </Table>
-      </Panel>
+      </div>
     );
   }
 
