@@ -40,10 +40,14 @@ body {
 
 .search-results-panel {
   flex: 1;
-  overflow-y: scroll;
   text-align: center;
   min-height: 200px;
   margin-bottom: 0;
+}
+
+.search-results--scroll-container {
+  flex: 1;
+  overflow-y: scroll;
 }
 
 .search-results--header-row {
