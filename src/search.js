@@ -171,7 +171,9 @@ function _filterAndSortTracksByBpm(tracks, targetBpm) {
   //Remove any duplicates (same title and album).
   const deduped = sortedTracks.filter( (track, index) => {
     return (sortedTracks.find( (track2, index2) => {
-      return (index !== index2 && track.track === track2.track && track.album === track2.album);
+      return (index < index2 &&
+        track.track.toLowerCase() === track2.track.toLowerCase() &&
+        track.album.toLowerCase() === track2.album.toLowerCase());
     }) === undefined);
   });
 
