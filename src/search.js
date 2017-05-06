@@ -47,7 +47,7 @@ function _getArtistId({s, artist, isRecursing=false}) {
   }).catch((err) => {
     if (err && err.status === 401 && !isRecursing) {
       //Probably means access token expired. Get new access token and try again.
-      return _setNewAccessToken().then( _getArtistId({s, artist, isRecursing:true}) );
+      return _setNewAccessToken(s).then( _getArtistId({s, artist, isRecursing:true}) );
     } else {
       throw err;
     }
