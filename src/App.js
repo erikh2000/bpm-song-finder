@@ -3,9 +3,8 @@ import {
   Button,
   Col,
   Form,
-  FormControl,
   FormGroup,
-  HelpBlock
+  Grid
 } from 'react-bootstrap';
 
 // Util
@@ -18,9 +17,11 @@ import {
   validateBpm,
   valState
 } from './validation';
+import { getBootstrapSize } from './layout';
 
 // Components
 import Footer from './Footer';
+import FormInput from './FormInput';
 import SearchResults from './SearchResults';
 
 class App extends Component {
@@ -32,7 +33,8 @@ class App extends Component {
       searchResults: null,
       searchError: null,
       loadingPercent: null,
-      loadingDescription: null
+      loadingDescription: null,
+      bsSize: null
     };
 
     this._handleArtistChange = this._handleArtistChange.bind(this);
@@ -41,6 +43,24 @@ class App extends Component {
     this._handleSearchClick = this._handleSearchClick.bind(this);
     this._handleProgressUpdate = this._handleProgressUpdate.bind(this);
     this._search = this._search.bind(this);
+    this._updateBsSize = this._updateBsSize.bind(this);
+  }
+
+  _updateBsSize() {
+    const bsSize = getBootstrapSize();
+    this.setState({bsSize});
+  }
+
+  componentWillMount() {
+    this._updateBsSize();
+  }
+
+  componentDidMount() {
+    window.addEventListener('resize', this._updateBsSize);
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('resize', this._updateBsSize);
   }
 
   render() {
@@ -50,23 +70,26 @@ class App extends Component {
 
     return (
       <div className='app'>
-        <div className='header'>
+        <Grid className='header'>
           <Form className='search-form'>
-            <FormGroup controlId='formAuthor'
-                validationState={valState(validateArtist(this.state.artist))}>
-              <Col sm={2}>
-                <FormControl type='text' value={this.state.artist} placeholder='e.g. David Bowie'
-                  onChange={this._handleArtistChange} onKeyPress={this._handleKeyPress}
+            <FormGroup controlId='formArtist' validationState={valState(validateArtist(this.state.artist))}>
+              <Col sm={3} md={3} lg={3}>
+                <FormInput
+                    value={this.state.artist}
+                    placeholder='e.g. David Bowie'
+                    onChange={this._handleArtistChange} onKeyPress={this._handleKeyPress}
+                    helpText={artistHelpText}
                 />
-                <HelpBlock>{artistHelpText}</HelpBlock>
               </Col>
             </FormGroup>
             <FormGroup controlId='formBPM' validationState={valState(validateBpm(this.state.bpm))}>
-              <Col sm={2}>
-                <FormControl type='text' value={this.state.bpm} placeholder='e.g. 180'
+              <Col xs={5} sm={3} md={3} lg={3}>
+                <FormInput
+                  value={this.state.bpm}
+                  placeholder='e.g. 180'
                   onChange={this._handleBpmChange} onKeyPress={this._handleKeyPress}
+                  helpText={bpmHelpText}
                 />
-                <HelpBlock>{bpmHelpText}</HelpBlock>
               </Col>
               <Col sm={1}>
                 <Button bsStyle='primary' disabled={searchDisabled}
@@ -75,7 +98,7 @@ class App extends Component {
             </FormGroup>
           </Form>
           <div className='title-graphic' />
-        </div>
+        </Grid>
         <SearchResults searchResults={this.state.searchResults} searchError={this.state.searchError}
             targetBpm={this.state.bpm} loadingPercent={this.state.loadingPercent}
             loadingDescription={this.state.loadingDescription}/>
