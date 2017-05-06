@@ -17,6 +17,16 @@ body {
   height: 100%;
 }
 
+.header {
+  width: 100%;
+}
+
+@media screen and (max-width: 767px) {
+  .header {
+    padding-top: 20px;
+  }
+}
+
 .title-graphic {
   background-image: url(title.png);
   background-repeat: no-repeat;
@@ -26,10 +36,8 @@ body {
   height: 56px;
 }
 
-@media screen and (max-width: 767px) {
-  .header {
-    padding-top: 20px;
-  }
+.col-xs-2, .col-xs-3, .col-xs-4, .col-xs-5 {
+  z-index: 1;
 }
 
 @media screen and (max-width: 840px) {
@@ -47,7 +55,12 @@ body {
 
 .search-results--scroll-container {
   flex: 1;
-  overflow-y: scroll;
+}
+
+@media screen and (min-height: 600px) {
+  .search-results--scroll-container {
+    overflow-y: scroll;
+  }
 }
 
 .search-results--header-row {
