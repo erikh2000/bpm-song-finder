@@ -20,6 +20,12 @@ match or are close to the BPM you chose. The results are color-coded to show how
 close each song is to the target BPM. Half-tempo results are also considered
 close, e.g. 90bpm matches to every other beat of 180bpm.
 
+# Broken Call to Authenticate
+
+The code has a reliance on somebody else's Heroku-hosted service that was basically letting me call Spotify without credentials. It was a great deal while it lasted, but now that service is gone. So additional work would be needed to allow a user to authneticate with their own Spotify credentials via OAuth or whatever is required. And the app would have a requirement that the user also had a Spotify account.
+
+I'm not interested in writing this functionality. But if someone else is, I will consult on the change and work with you on accepting your merge request.
+
 # Underneath the Hood
 
 The song database comes from Spotify. They have a great selection of songs and
@@ -43,5 +49,12 @@ I've put this out into the world under the oh-so-permissive MIT license. Feel
 free to use the code for your own projects. I would appreciate bug reports and
 source code contributions.
 
--Erik Hermansen
-ehermansen@seespacelabs.com
+### Contributing
+
+The project isn't open to contributions at this point, other than the one I described under "Broken Call to Authenticate" above.
+
+### Contacting
+
+You can reach me on LinkedIn. I'll accept connections if you will just mention this project or some other shared interest in your connection request.
+
+https://www.linkedin.com/in/erikhermansen/
