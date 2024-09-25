@@ -17,7 +17,6 @@
     "spotify-web-api-js": "^0.21.2"
   },
   "devDependencies": {
-    "gh-pages": "^0.12.0",
     "react-scripts": "0.9.5"
   },
   "scripts": {
@@ -25,8 +24,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
-    "predeploy": "npm run build",
-    "deploy": "gh-pages -d build"
+    "predeploy": "npm run build"
   },
   "eslintConfig": {
     "extends": "react-app"
